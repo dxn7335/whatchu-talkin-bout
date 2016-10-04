@@ -1,5 +1,5 @@
 {
-  "name": "Whatchu Talkin Bout",
+  "name": "Whatchu-Talkin-Bout",
   "version": "0.0.1",
   "description": "Simple Twitter Content Aggregator w/ cycle.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "@cycle/base": "^4.1.1",
     "@cycle/core": "^7.0.0",
     "@cycle/dom": "12.1.0",
+    "@cycle/history": "^4.0.1",
     "@cycle/http": "^11.0.0",
     "@cycle/rxjs-adapter": "^3.0.2",
     "@cycle/rxjs-run": "^3.0.3",
