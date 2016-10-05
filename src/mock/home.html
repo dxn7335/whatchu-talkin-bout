@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Side-b</title>
+    <script src="./build/app.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="./build/app.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,900" rel="stylesheet"/>
+    <style>
+      html {
+        font-family: 'Lato', sans-serif;
+      }
+      .question-header {
+        margin: auto;
+        margin-bottom: 35px;
+        font-weight: 700;
+        font-size: 40px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #393838;
+      }
+      #app_container {
+        margin: auto;
+        width: 75%;
+        padding: 5%;
+        min-width: 400px;
+        display: block;
+      }
+      .question-header__input {
+        position: relative;
+        display: inline-block;
+      }
+      .question-header__input input {
+        font-size: inherit;
+        font-weight: inherit;
+        text-transform: uppercase;
+        outline: none;
+        border: 0;
+        border-bottom: 1px solid #eee;
+        width: 300px;
+        color: #ff0040;
+        background: none;
+      }
+      .question-header__input .auto-complete {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.25;
+        pointer-events: none;
+      }
+      .question-header__input .user-input {
+        position: relative;
+        z-index: 1;
+      }
+      .question-results ul {
+        padding: 0;
+        list-style: none;
+        color: #919191;
+        font-weight: 300;
+        font-size: 24px;
+      }
+      .question-results li {
+        margin-bottom: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app_container">
+      <header class="question-header">
+      <span class="question-header__wrapper">
+        What you talkin bout,<br/>
+        <div class="question-header__input">
+          <input class="user-input" value="pet" />
+          <input class="auto-complete" value="petroochio" />
+        </div>
+        ?
+      </span>
+      </header>
+      <section class="question-results">
+        <ul>
+          <li>example</li>
+          <li>example</li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
