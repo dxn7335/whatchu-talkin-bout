@@ -1,7 +1,26 @@
+import R, { flatten, take } from 'ramda';
 import { run } from '@cycle/rxjs-run';
 import { Observable, Scheduler } from 'rxjs';
 import { h, div, makeDOMDriver } from '@cycle/dom';
 import { makeHTTPDriver } from '@cycle/http';
+
+const renderHeader = username =>
+  h( 'header.question-header', [
+    h('span.question-header__wrapper', [
+      'What you commitin,',
+      h('br'),
+      h('div.question-header__input', [
+        h('input#username.user-input'),
+        h('input.auto-complete', { props: { value: username } } ),
+      ]),
+      '?',
+    ])
+  ]);
+
+const renderCommits = commits =>
+  h('section.question-results', [
+      h('ul', take( 5, commits ).map( c => h( 'li', [c] ) ) )
+    ]);
 
 const main = ({ DOM, HTTP }) => {
   const search$ = DOM.select( '#username' )
@@ -25,13 +44,12 @@ const main = ({ DOM, HTTP }) => {
     .map( req => {
       return req.body
     })
+    .map( resp => resp && resp.items[0] && resp.items[0].login )
     .startWith(null);
 
   // Get commits by a user
   const commitReq$ = searchResponse$
-    .map( resp => resp && resp.items[0].login )
     .map( username => {
-      console.log(username);
       return {
         url: `https://api.github.com/users/${username}/events/public`,
         category: 'commits',
@@ -43,19 +61,17 @@ const main = ({ DOM, HTTP }) => {
   const commitResponse$ = HTTP.select('commits')
     .mergeAll()
     .map( ({ body }) => body.filter( evt => evt.type === 'PushEvent' ) )
-    .map( events => events.map( ({ payload }) => payload.commits ) )
-    .startWith(null)
-    .subscribe( e => console.log(e) );
+    .map( events => flatten( events.map( ({ payload }) => payload.commits ) ) )
+    .map( events => events.map( ({ message }) => message ) )
+    .startWith([]);
 
   // Assemble dom from response stream
-  const vdom$ = searchResponse$
-    .map( info => {
-      return div( '.input-prompt',
-        [
-          h('h2', 'WHAT YOU COMMITIN, '),
-          h('input#username'),
-        ]
-      );
+  const vdom$ = Observable.combineLatest( searchResponse$, commitResponse$ )
+    .map( ([ username, commits ]) => {
+      return div([
+        renderHeader( username ),
+        renderCommits( commits ),
+      ]);
     });
 
   const sinks = {
