@@ -94,7 +94,7 @@
 	  });
 
 	  // Parse responses for users
-	  var searchResponse$ = HTTP.select('users').mergeAll().map(function (req) {
+	  var searchResponse$ = HTTP.select('users').onErrorResumeNext().mergeAll().map(function (req) {
 	    return req.body;
 	  }).map(function (resp) {
 	    return resp && resp.items[0] && resp.items[0].login;
@@ -110,7 +110,7 @@
 	  });
 
 	  // Parse responses for users
-	  var commitResponse$ = HTTP.select('commits').mergeAll().map(function (_ref4) {
+	  var commitResponse$ = HTTP.select('commits').onErrorResumeNext().mergeAll().map(function (_ref4) {
 	    var body = _ref4.body;
 	    return body.filter(function (evt) {
 	      return evt.type === 'PushEvent';
