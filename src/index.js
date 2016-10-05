@@ -40,8 +40,9 @@ const main = ({ DOM, HTTP }) => {
 
   // Parse responses for users
   const searchResponse$ = HTTP.select('users')
-    .onErrorResumeNext()
     .mergeAll()
+    .onErrorResumeNext(Observable.of( false ))
+    .filter( error => error )
     .map( req => {
       return req.body
     })
@@ -60,8 +61,9 @@ const main = ({ DOM, HTTP }) => {
 
   // Parse responses for users
   const commitResponse$ = HTTP.select('commits')
-    .onErrorResumeNext()
     .mergeAll()
+    .onErrorResumeNext(Observable.of( false ))
+    .filter( error => error )
     .map( ({ body }) => body.filter( evt => evt.type === 'PushEvent' ) )
     .map( events => flatten( events.map( ({ payload }) => payload.commits ) ) )
     .map( events => events.map( ({ message }) => message ) )
